@@ -1,0 +1,257 @@
+/* ===============================
+   Overlay
+=============================== */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    padding: 16px;
+  }
+  
+  /* ===============================
+     Backdrop
+  =============================== */
+  
+  .modal__backdrop {
+    position: absolute;
+    inset: 0;
+  
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+  }
+  
+  /* ===============================
+     Panel
+  =============================== */
+  
+  .modal__panel {
+    position: relative;
+    z-index: 1;
+  
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+  
+    overflow-y: auto;
+    overflow-x: hidden;
+  
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 24px;
+  
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* ===============================
+     Scrollbar
+  =============================== */
+  
+  /* Chrome / Edge / Safari */
+  .modal__panel::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .modal__panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .modal__panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+  }
+  
+  /* Firefox */
+  .modal__panel {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+  }
+  
+  /* ===============================
+     Close
+  =============================== */
+  
+  .modal__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  
+    width: 32px;
+    height: 32px;
+  
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+  
+    font-size: 18px;
+    color: #6b7280;
+  
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  
+  .modal__close:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+  
+  /* ===============================
+     Title
+  =============================== */
+  
+  .modal__title {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  /* ===============================
+     Form
+  =============================== */
+  
+  .modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  /* 🔒 защита от горизонтального overflow */
+  .modal__form,
+  .modal__form * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* ===============================
+     Labels
+  =============================== */
+  
+  .modal__form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  /* ===============================
+     Inputs / Select / Textarea
+  =============================== */
+  
+  .modal__form input,
+  .modal__form select,
+  .modal__form textarea {
+    width: 100%;
+    min-height: 40px;
+  
+    padding: 8px 12px;
+  
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+  
+    font-size: 14px;
+    color: #111827;
+  
+    background: #ffffff;
+  
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  
+  .modal__form textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  /* focus */
+  .modal__form input:focus,
+  .modal__form select:focus,
+  .modal__form textarea:focus {
+    outline: none;
+    border-color: #1dbf73;
+    box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.15);
+  }
+  
+  /* disabled */
+  .modal__form input:disabled,
+  .modal__form select:disabled,
+  .modal__form textarea:disabled {
+    background: #f9fafb;
+    cursor: not-allowed;
+  }
+  
+  /* ===============================
+     Row (dates)
+  =============================== */
+  
+  .modal__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  /* ===============================
+     Submit
+  =============================== */
+  
+  .modal__submit {
+    margin-top: 24px;
+    padding: 14px;
+  
+    width: 100%;          
+    display: block;
+  
+    border-radius: 10px;
+    border: none;
+  
+    background: #1dbf73;
+    color: #ffffff;
+  
+    font-size: 15px;
+    font-weight: 600;
+  
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      transform 0.1s ease;
+  }
+  
+  .modal__submit:hover {
+    background: #17a863;
+  }
+  
+  .modal__submit:active {
+    transform: scale(0.97);
+  }
+  
+  /* ===============================
+     Responsive
+  =============================== */
+  
+  @media (max-width: 640px) {
+    .modal__panel {
+      padding: 20px 16px;
+    }
+  
+    .modal__title {
+      font-size: 18px;
+    }
+  
+    .modal__row {
+      grid-template-columns: 1fr;
+    }
+  }
+  
