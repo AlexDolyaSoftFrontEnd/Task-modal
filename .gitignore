@@ -1,0 +1,63 @@
+# ===============================
+# Node / Package managers
+# ===============================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===============================
+# Build outputs
+# ===============================
+
+dist/
+build/
+out/
+.next/
+coverage/
+
+# ===============================
+# Environment variables
+# ===============================
+
+.env
+.env.*
+!.env.example
+
+# ===============================
+# OS / Editor files
+# ===============================
+
+.DS_Store
+Thumbs.db
+
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+.idea/
+
+# ===============================
+# Logs
+# ===============================
+
+logs/
+*.log
+
+# ===============================
+# Cache
+# ===============================
+
+.cache/
+.eslintcache
+.parcel-cache/
+
+# ===============================
+# Temporary
+# ===============================
+
+*.tmp
+*.temp
+*.swp

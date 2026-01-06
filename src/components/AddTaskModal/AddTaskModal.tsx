@@ -3,6 +3,7 @@ import styles from "./AddTaskModal.module.css";
 
 export type TaskFormData = {
   title: string;
+  status: "default" | "active";
   assignee: string;
   startDate: string;
   dueDate: string;
@@ -17,11 +18,12 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: TaskFormData) => void;
+  initialData?: Partial<TaskFormData>;
 };
 
-// Пустое состояние формы
 const EMPTY_FORM: TaskFormData = {
   title: "",
+  status: "default",
   assignee: "user",
   startDate: "",
   dueDate: "",
@@ -36,27 +38,25 @@ export default function AddTaskModal({
   isOpen,
   onClose,
   onSubmit,
+  initialData,
 }: Props) {
-  // Централизованное состояние формы
   const [form, setForm] = useState<TaskFormData>(EMPTY_FORM);
-
-  // Флаг защиты от повторной отправки
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Ref для автофокуса на первом поле
   const titleRef = useRef<HTMLInputElement | null>(null);
 
-  // Сброс формы и автофокус при открытии модалки
+  /* ===============================
+     Open / close effects
+  =============================== */
+
   useEffect(() => {
     if (!isOpen) return;
 
-    setForm(EMPTY_FORM);
+    setForm({ ...EMPTY_FORM, ...initialData });
     requestAnimationFrame(() => {
       titleRef.current?.focus();
     });
-  }, [isOpen]);
+  }, [isOpen, initialData]);
 
-  // Закрытие по Esc и блокировка скролла body
   useEffect(() => {
     if (!isOpen) return;
 
@@ -73,7 +73,10 @@ export default function AddTaskModal({
     };
   }, [isOpen, onClose]);
 
-  // Универсальный обработчик изменения полей формы
+  /* ===============================
+     Form logic
+  =============================== */
+
   const updateField = useCallback(
     (
       e: React.ChangeEvent<
@@ -81,8 +84,6 @@ export default function AddTaskModal({
       >
     ) => {
       const { name, value } = e.target;
-
-      // Защита от несуществующих полей
       setForm((prev) =>
         name in prev ? { ...prev, [name]: value } : prev
       );
@@ -90,21 +91,18 @@ export default function AddTaskModal({
     []
   );
 
-  // Валидация дат: дата окончания не раньше даты начала
   const isDatesValid =
     !form.startDate ||
     !form.dueDate ||
     form.startDate <= form.dueDate;
 
-  // Вычисляемое состояние доступности кнопки сохранения
   const canSubmit =
     form.title.trim().length > 0 &&
     isDatesValid &&
     !isSubmitting;
 
-  // Безопасная отправка формы с защитой от двойного клика
   const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!canSubmit) return;
 
@@ -123,7 +121,6 @@ export default function AddTaskModal({
 
   return (
     <div className={styles.modal} role="presentation">
-      {/* Закрытие модалки только по клику на overlay */}
       <div
         className={styles["modal__backdrop"]}
         onClick={(e) => {
@@ -143,7 +140,7 @@ export default function AddTaskModal({
             id="add-task-title"
             className={styles["modal__title"]}
           >
-            Add Task
+            {initialData ? "Edit Task" : "Add Task"}
           </h2>
 
           <button
@@ -156,110 +153,119 @@ export default function AddTaskModal({
           </button>
         </header>
 
-        <main>
-          <form
-            className={styles["modal__form"]}
-            onSubmit={handleSubmit}
-            noValidate
+        <form
+          className={styles["modal__form"]}
+          onSubmit={handleSubmit}
+          noValidate
+        >
+          <label htmlFor="title">Title:</label>
+          <input
+            ref={titleRef}
+            id="title"
+            name="title"
+            value={form.title}
+            onChange={updateField}
+            required
+          />
+
+          <label htmlFor="status">Status:</label>
+          <select
+            id="status"
+            name="status"
+            value={form.status}
+            onChange={updateField}
           >
-            <label htmlFor="title">Task title *</label>
-            <input
-              ref={titleRef}
-              id="title"
-              name="title"
-              value={form.title}
-              onChange={updateField}
-              required
-            />
+            <option value="default">Default</option>
+            <option value="active">Active</option>
+          </select>
 
-            <label htmlFor="assignee">Assign to *</label>
-            <select
-              id="assignee"
-              name="assignee"
-              value={form.assignee}
-              onChange={updateField}
-            >
-              <option value="user">user</option>
-              <option value="admin">admin</option>
-            </select>
+          <label htmlFor="assignee">Assign to</label>
+          <select
+            id="assignee"
+            name="assignee"
+            value={form.assignee}
+            onChange={updateField}
+          >
+            <option value="user">user</option>
+            <option value="admin">admin</option>
+          </select>
 
-            <div className={styles["modal__row"]}>
-              <div>
-                <label htmlFor="startDate">Start Date</label>
-                <input
-                  id="startDate"
-                  type="date"
-                  name="startDate"
-                  value={form.startDate}
-                  onChange={updateField}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="dueDate">Due Date</label>
-                <input
-                  id="dueDate"
-                  type="date"
-                  name="dueDate"
-                  value={form.dueDate}
-                  onChange={updateField}
-                />
-              </div>
+          <div className={styles["modal__row"]}>
+            <div>
+              <label htmlFor="startDate">Start Date:</label>
+              <input
+                id="startDate"
+                type="date"
+                name="startDate"
+                value={form.startDate}
+                onChange={updateField}
+              />
             </div>
 
-            {!isDatesValid && (
-              <small style={{ color: "#dc2626" }}>
-                Дата окончания не может быть раньше даты начала
-              </small>
-            )}
+            <div>
+              <label htmlFor="dueDate">Due Date:</label>
+              <input
+                id="dueDate"
+                type="date"
+                name="dueDate"
+                value={form.dueDate}
+                onChange={updateField}
+              />
+            </div>
+          </div>
 
-            <input
-              name="account"
-              value={form.account}
-              onChange={updateField}
-              placeholder="Account (optional)"
-            />
+          {!isDatesValid && (
+            <small style={{ color: "#dc2626" }}>
+              The end date cannot be earlier than the start date.
+            </small>
+          )}
 
-            <input
-              name="deal"
-              value={form.deal}
-              onChange={updateField}
-              placeholder="Deal (optional)"
-            />
+          <input
+            name="account"
+            value={form.account}
+            onChange={updateField}
+            placeholder="Account"
+          />
 
-            <input
-              name="contact"
-              value={form.contact}
-              onChange={updateField}
-              placeholder="Contact (optional)"
-            />
+          <input
+            name="deal"
+            value={form.deal}
+            onChange={updateField}
+            placeholder="Deal"
+          />
 
-            <input
-              name="phone"
-              value={form.phone}
-              onChange={updateField}
-              placeholder="Phone Number (optional)"
-            />
+          <input
+            name="contact"
+            value={form.contact}
+            onChange={updateField}
+            placeholder="Contact"
+          />
 
-            <label htmlFor="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              value={form.description}
-              onChange={updateField}
-            />
+          <input
+            name="phone"
+            value={form.phone}
+            onChange={updateField}
+            placeholder="Phone Number"
+          />
 
-            <footer>
-              <button
-                type="submit"
-                className={styles["modal__submit"]}
-                disabled={!canSubmit}
-              >
-                {isSubmitting ? "Сохранение…" : "Save"}
-              </button>
-            </footer>
-          </form>
-        </main>
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={form.description}
+            onChange={updateField}
+          />
+
+          <footer>
+            <button
+              type="submit"
+              className={styles["modal__submit"]}
+              disabled={!canSubmit}
+            >
+              {isSubmitting ? "Сохранение…" : "Save"}
+            </button>
+          </footer>
+        </form>
       </div>
     </div>
   );
