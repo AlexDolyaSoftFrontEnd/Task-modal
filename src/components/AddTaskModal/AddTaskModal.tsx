@@ -179,20 +179,20 @@ export default function AddTaskModal({
             <option value="active">Active</option>
           </select>
 
-          <label htmlFor="assignee">Assign to</label>
+          <label htmlFor="assignee">Assign to:</label>
           <select
             id="assignee"
             name="assignee"
             value={form.assignee}
             onChange={updateField}
           >
-            <option value="user">user</option>
-            <option value="admin">admin</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
           </select>
 
           <div className={styles["modal__row"]}>
             <div>
-              <label htmlFor="startDate">Start Date:</label>
+              <label htmlFor="startDate">Start date:</label>
               <input
                 id="startDate"
                 type="date"
@@ -203,7 +203,7 @@ export default function AddTaskModal({
             </div>
 
             <div>
-              <label htmlFor="dueDate">Due Date:</label>
+              <label htmlFor="dueDate">Due date:</label>
               <input
                 id="dueDate"
                 type="date"
@@ -220,35 +220,7 @@ export default function AddTaskModal({
             </small>
           )}
 
-          <input
-            name="account"
-            value={form.account}
-            onChange={updateField}
-            placeholder="Account"
-          />
-
-          <input
-            name="deal"
-            value={form.deal}
-            onChange={updateField}
-            placeholder="Deal"
-          />
-
-          <input
-            name="contact"
-            value={form.contact}
-            onChange={updateField}
-            placeholder="Contact"
-          />
-
-          <input
-            name="phone"
-            value={form.phone}
-            onChange={updateField}
-            placeholder="Phone Number"
-          />
-
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description">Description:</label>
           <textarea
             id="description"
             name="description"
