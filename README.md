@@ -37,6 +37,7 @@
   * `useEffect`
   * `useCallback`
   * `useRef`
+    
 * **Single source of truth** для состояния формы
 * Универсальный обработчик полей формы
 * Минимальные и предсказуемые side-effects
@@ -55,12 +56,3 @@
 * Изоляция стилей и логики компонента
 
 ---
-
-## Структура проекта
-
-```txt
-task-modal/
-├── AddTaskModal.tsx
-├── AddTaskModal.module.css
-└── README.md
-```
